@@ -1,0 +1,46 @@
+{
+  "name": "antd-modal-reset-plugin",
+  "version": "0.0.3",
+  "description": "a plugin used to reset state of a modal after being closed",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhanzizhen/antd-modal-reset-plugin.git"
+  },
+  "keywords": [
+    "antd-modal-reset-plugin",
+    "antd-modal"
+  ],
+  "author": "Zhan zizhen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhanzizhen/antd-modal-reset-plugin/issues"
+  },
+  "homepage": "https://github.com/zhanzizhen/antd-modal-reset-plugin#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-typescript": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "@babel/preset-typescript": "^7.7.2",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.0",
+    "mocha": "^6.2.2",
+    "react": "^16.5.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.11"
+  }
+}
