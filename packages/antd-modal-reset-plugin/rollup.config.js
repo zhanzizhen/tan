@@ -15,12 +15,12 @@ export default {
     }
   ],
   plugins: [
-    resolve({ extensions: [".ts", ".js", ".jsx", ".tsx"] }),
+    resolve(),
     babel({
       exclude: "node_modules/**",
       extensions: [".js", ".jsx", ".ts", ".tsx"]
     }),
     commonjs()
   ],
-  external: ["react"]
+  external: ["react", "prop-types"]
 };

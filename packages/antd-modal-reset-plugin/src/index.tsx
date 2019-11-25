@@ -1,8 +1,9 @@
 import React from "react";
+import propTypes from "prop-types";
 
 interface wapperProps {
   visible: boolean;
-  destroyOnClose?: boolean;
+  disableReset?: boolean;
 }
 interface wapperState {
   key: number;
@@ -19,7 +20,7 @@ export default function modalResetPlugin(
     timer: any;
 
     componentDidUpdate(prevProps: wapperProps) {
-      if (this.props.destroyOnClose === true) {
+      if (this.props.disableReset !== true) {
         if (prevProps.visible === true && this.props.visible === false) {
           this.timer = setTimeout(this.resetModal, 400);
         }
@@ -41,3 +42,11 @@ export default function modalResetPlugin(
     }
   };
 }
+
+modalResetPlugin.propTypes = {
+  visible: propTypes.bool.isRequired,
+  disableReset: propTypes.bool
+};
+modalResetPlugin.defaultProps = {
+  disableReset: false
+};

@@ -1,6 +1,6 @@
 {
   "name": "antd-modal-reset-plugin",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "a plugin used to reset state of a modal after being closed",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,7 +9,8 @@
     "es"
   ],
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "publish-plus": "rollup -c && npm publish"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.0",
     "mocha": "^6.2.2",
+    "prop-types": "^15.7.2",
     "react": "^16.5.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
