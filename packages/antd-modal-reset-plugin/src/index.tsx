@@ -31,11 +31,11 @@ export default function modalResetPlugin(
       window.clearTimeout(this.timer);
     }
 
-    resetModal() {
+    resetModal = () => {
       this.setState({
         key: this.state.key + 1
       });
-    }
+    };
 
     render() {
       return <WrappedComponent key={this.state.key} {...this.props} />;
