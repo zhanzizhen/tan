@@ -1,26 +1,26 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import babel from "rollup-plugin-babel";
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
 
 export default {
-  input: "src/index.tsx",
+  input: 'src/index.tsx',
   output: [
     {
-      file: "lib/index.js",
-      format: "cjs"
+      file: 'lib/index.js',
+      format: 'cjs',
     },
     {
-      file: "es/index.js",
-      format: "esm"
-    }
+      file: 'es/index.js',
+      format: 'esm',
+    },
   ],
   plugins: [
     resolve(),
     babel({
-      exclude: "node_modules/**",
-      extensions: [".js", ".jsx", ".ts", ".tsx"]
+      exclude: 'node_modules/**',
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
-    commonjs()
+    commonjs(),
   ],
-  external: ["react", "prop-types"]
+  external: ['react', 'prop-types'],
 };
