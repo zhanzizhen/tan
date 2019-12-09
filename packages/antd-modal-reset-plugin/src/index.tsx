@@ -19,17 +19,11 @@ export default function modalResetPlugin(
       key: INITIAL_KEY,
     };
 
-    isFirstRender = true;
-
     componentDidUpdate(prevProps: IWapperProps) {
       if (this.props.disableReset === true) {
         return;
       }
       if (prevProps.visible === false && this.props.visible === true) {
-        if (this.isFirstRender === true) {
-          this.isFirstRender = false;
-          return;
-        }
         this.resetModal();
       }
     }
