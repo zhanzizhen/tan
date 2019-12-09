@@ -1,39 +1,42 @@
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react';
+import propTypes from 'prop-types';
 
-interface wapperProps {
+interface IWapperProps {
   visible: boolean;
   disableReset?: boolean;
 }
-interface wapperState {
+interface IWapperState {
   key: number;
 }
 
+const INITIAL_KEY = 0;
+
 export default function modalResetPlugin(
-  WrappedComponent: React.Component | React.FunctionComponent
+  WrappedComponent: React.Component | React.FunctionComponent,
 ) {
-  return class Wrapper extends React.Component<wapperProps, wapperState> {
+  return class Wrapper extends React.Component<IWapperProps, IWapperState> {
     state = {
-      key: 0
+      key: INITIAL_KEY,
     };
 
-    timer: any;
+    isFirstRender = true;
 
-    componentDidUpdate(prevProps: wapperProps) {
-      if (this.props.disableReset !== true) {
-        if (prevProps.visible === true && this.props.visible === false) {
-          this.timer = setTimeout(this.resetModal, 400);
-        }
+    componentDidUpdate(prevProps: IWapperProps) {
+      if (this.props.disableReset === true) {
+        return;
       }
-    }
-
-    componentWillUnmount() {
-      window.clearTimeout(this.timer);
+      if (prevProps.visible === false && this.props.visible === true) {
+        if (this.isFirstRender === true) {
+          this.isFirstRender = false;
+          return;
+        }
+        this.resetModal();
+      }
     }
 
     resetModal = () => {
       this.setState({
-        key: this.state.key + 1
+        key: this.state.key + 1,
       });
     };
 
@@ -45,8 +48,8 @@ export default function modalResetPlugin(
 
 modalResetPlugin.propTypes = {
   visible: propTypes.bool.isRequired,
-  disableReset: propTypes.bool
+  disableReset: propTypes.bool,
 };
 modalResetPlugin.defaultProps = {
-  disableReset: false
+  disableReset: false,
 };
