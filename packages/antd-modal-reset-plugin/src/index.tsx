@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import propTypes from 'prop-types';
-
-interface IWapperProps {
-  visible: boolean;
-  disableReset?: boolean;
-}
-interface IWapperState {
-  key: number;
-}
 
 const INITIAL_KEY = 0;
 
-export default function modalResetPlugin(
-  WrappedComponent: React.Component | React.FunctionComponent,
+export default function modalResetPlugin<P>(
+  WrappedComponent: React.ComponentClass | React.SFC,
 ) {
+  interface IWapperProps {
+    visible: boolean;
+    disableReset?: boolean;
+  }
+  interface IWapperState {
+    key: number;
+  }
   return class Wrapper extends React.Component<IWapperProps, IWapperState> {
     state = {
       key: INITIAL_KEY,

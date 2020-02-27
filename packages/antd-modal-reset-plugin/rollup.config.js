@@ -8,10 +8,12 @@ export default {
     {
       file: 'lib/index.js',
       format: 'cjs',
+      sourcemap: true,
     },
     {
       file: 'es/index.js',
       format: 'esm',
+      sourcemap: true,
     },
   ],
   plugins: [
