@@ -26,12 +26,18 @@ npm i --save antd-modal-reset-plugin
 ```js
 // MyModal.jsx
 import modalReset from 'antd-modal-reset-plugin';
-
-@modalReset
-class MyModal extends React.Component {}
+import MyModal from '../somewhere'
 
 // App.jsx
-<MyModal visible={modalVisible} />;
+const SuperModal = modalReset(MyModal)
+<SuperModal visible={modalVisible} />;
+```
+
+或者你可以：
+
+```js
+@modalReset
+class MyModal extends Component {}
 ```
 
 你也可以控制某次 open modal 的时候不重置这个 modal，方式是给组件传一个 disableReset 的 props
