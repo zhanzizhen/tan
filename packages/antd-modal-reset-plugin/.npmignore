@@ -6,3 +6,7 @@ rollup.config.js
 jest.config.js
 coverage
 .vscode
+.babelrc
+.eslintrc.js
+.travis.yml
+LICENSE
