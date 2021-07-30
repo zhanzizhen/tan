@@ -1,0 +1,1 @@
+function diffVnode(oldVnode, newVnode) {}
