@@ -23,8 +23,6 @@ export default class App extends Component<any, { todoList: string[] }> {
       <div>
         <div>{msg}</div>
 
-        <hr />
-
         <button onClick={this.reverse}>reverse</button>
       </div>
     );

@@ -1,71 +1,155 @@
-import { Component } from "preact";
-import { setProperty } from "../diff/props";
-import { ComponentChild, ComponentChildren, VNode } from "../typings/internal";
+/**
+ * 1. 类型从types/interval引入
+ */
 
-export const renderApp = (app: JSX.Element, target: HTMLElement) => {
-  addComponent(app.type, target);
+import diffElementNodes from "../diff/diffVnode";
+import { ComponentChildren, VNode } from "../types/internal";
+import { createVNode } from "../utils/vnode";
+
+export const renderApp = (app: VNode, target: HTMLElement) => {
+  diffVnode(app, {}, target);
 };
 
-export function addChildren(content: ComponentChildren, target: HTMLElement) {
-  if (content === null) return;
-
-  if (Array.isArray(content)) {
-    for (let child of content) {
-      addChildren(child, target);
-    }
-    return;
-  }
-
-  switch (typeof content) {
-    case "string": // text
-      target.append(content);
-      break;
-    case "number":
-    case "boolean":
-      target.append(String(content));
-      break;
-    case "undefined":
-      break;
-    default:
-      // vnode
-      mount(content, target);
-  }
+export function Fragment(props: VNode["props"]) {
+  return props.children;
 }
 
-function addComponent(comp: Component, target: HTMLElement) {
-  // @ts-ignore
-  const component = new comp();
-  const vnode2 = component.render();
-  component.__vnode__ = vnode2;
-  mount(vnode2, target);
-}
+export function diffChildren(
+  renderResult: ComponentChildren[],
+  newParentVnode: VNode,
+  oldParentVnode: VNode,
+  parentDom: HTMLElement
+) {
+  if (!newParentVnode._children) newParentVnode._children = [];
 
-function mount(vnode: VNode<any>, target: HTMLElement) {
-  const creator = vnode.type;
-  if (typeof creator === "function") {
-    if (creator instanceof Component) {
-      addComponent(creator, target);
+  let oldChildren = (oldParentVnode && oldParentVnode._children) || [];
+
+  for (let i = 0; i < renderResult.length; i++) {
+    let childVnode = renderResult[i];
+
+    if (childVnode == null || typeof childVnode == "boolean") {
+      childVnode = newParentVnode._children[i] = null;
+    } else if (
+      typeof childVnode == "string" ||
+      typeof childVnode == "number" ||
+      // eslint-disable-next-line valid-typeof
+      typeof childVnode == "bigint"
+    ) {
+      childVnode = newParentVnode._children[i] = createVNode(
+        null,
+        childVnode,
+        null,
+        null,
+        childVnode
+      );
+    } else if (Array.isArray(childVnode)) {
+      childVnode = newParentVnode._children[i] = createVNode(
+        Fragment,
+        { children: childVnode },
+        null,
+        null,
+        null
+      );
+    } else if (childVnode._depth > 0) {
+      // VNode is already in use, clone it. This can happen in the following
+      // scenario:
+      //   const reuse = <div />
+      //   <div>{reuse}<span />{reuse}</div>
+      childVnode = newParentVnode._children[i] = createVNode(
+        childVnode.type,
+        childVnode.props,
+        childVnode.key,
+        null,
+        childVnode._original
+      );
+    } else {
+      childVnode = newParentVnode._children[i] = childVnode;
     }
-  } else {
-    const { props } = vnode;
 
-    const elem = document.createElement(creator);
-    vnode._dom = elem;
-    for (let key in props) {
-      if (key === "children") {
-        addChildren(props.children, elem);
-      } else {
-        setProperty(elem, key, props[key], null, false);
-        // // @ts-ignore
-        // const value = props[key];
-        // if (typeof value === "function") {
-        //   // debugger;
-        //   elem.addEventListener(key.slice(2).toLowerCase(), value);
-        // } else {
-        //   elem.setAttribute(key, value);
-        // }
+    if (childVnode == null) {
+      continue;
+    }
+
+    childVnode._parent = newParentVnode;
+    childVnode._depth = (newParentVnode._depth ?? 0) + 1;
+
+    // Check if we find a corresponding element in oldChildren.
+    // If found, delete the array item by setting to `undefined`.
+    // We use `undefined`, as `null` is reserved for empty placeholders
+    // (holes).
+    let oldVnode = oldChildren[i];
+
+    if (
+      oldVnode === null ||
+      (oldVnode &&
+        childVnode.key == oldVnode.key &&
+        childVnode.type === oldVnode.type)
+    ) {
+      oldChildren[i] = undefined;
+    } else {
+      // Either oldVnode === undefined or oldChildrenLength > 0,
+      // so after this loop oldVnode == null or oldVnode is a valid value.
+      for (let j = 0; j < oldChildren.length; j++) {
+        oldVnode = oldChildren[j];
+        // If childVnode is unkeyed, we only match similarly unkeyed nodes, otherwise we match by key.
+        // We always match by type (in either case).
+        if (
+          oldVnode &&
+          childVnode.key == oldVnode.key &&
+          childVnode.type === oldVnode.type
+        ) {
+          oldChildren[j] = undefined;
+          break;
+        }
+        oldVnode = null;
       }
     }
-    target.appendChild(elem);
+
+    oldVnode = oldVnode || {};
+
+    // Morph the old element into the new one, but don't append it to the dom yet
+    diffVnode(childVnode, oldVnode, parentDom);
+
+    const newDom = childVnode._dom;
+    if (newDom && !oldVnode._dom) {
+      parentDom.appendChild(newDom);
+    }
+  }
+}
+
+export function diffVnode(
+  newVnode: VNode<any>,
+  oldVnode: VNode<any>,
+  parentDom: HTMLElement
+) {
+  const newVType = newVnode.type;
+
+  // TODO: 处理这个逻辑
+  if (typeof newVType === "function") {
+    var c = (newVnode._component = new newVType());
+
+    let newProps = newVnode.props;
+    c.props = newProps;
+
+    const tmp = (c._vnode = c.render(c.props, c.state, c.context));
+
+    let isTopLevelFragment =
+      tmp != null && tmp.type === Fragment && tmp.key == null;
+    let renderResult = isTopLevelFragment ? tmp.props.children : tmp;
+
+    diffChildren(
+      Array.isArray(renderResult) ? renderResult : [renderResult],
+      newVnode,
+      oldVnode,
+      parentDom
+    );
+  } else {
+    newVnode._dom = diffElementNodes(
+      oldVnode._dom,
+      newVnode,
+      oldVnode,
+      null,
+      false
+    );
   }
 }

@@ -9,7 +9,7 @@ import { IS_NON_DIMENSIONAL } from "../constants";
  * @param {boolean} isSvg Whether or not this node is an SVG node
  * @param {boolean} hydrate Whether or not we are in hydration mode
  */
-export function diffProps(dom, newProps, oldProps, isSvg, hydrate) {
+export default function diffProps(dom, newProps, oldProps, isSvg, hydrate) {
   let i;
 
   for (i in oldProps) {

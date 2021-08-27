@@ -5,7 +5,7 @@ import {
 	ClassAttributes,
 	Component,
 	PreactDOMAttributes,
-	VNode
+	__VNode
 } from './index';
 
 type Defaultize<Props, Defaults> =
@@ -26,7 +26,7 @@ export namespace JSXInternal {
 		key?: any;
 	}
 
-	export interface Element extends VNode<any> {}
+	export interface Element extends __VNode<any> {}
 
 	export interface ElementClass extends Component<any, any> {}
 

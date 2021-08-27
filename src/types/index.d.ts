@@ -8,7 +8,7 @@ export import JSX = JSXInternal;
 // Preact Virtual DOM
 // -----------------------------------
 
-export interface VNode<P = {}> {
+export interface __VNode<P = {}> {
 	type: ComponentType<P> | string;
 	props: P & { children: ComponentChildren };
 	key: Key;
@@ -42,7 +42,7 @@ export type RefCallback<T> = (instance: T | null) => void;
 export type Ref<T> = RefObject<T> | RefCallback<T>;
 
 export type ComponentChild =
-	| VNode<any>
+	| __VNode<any>
 	| object
 	| string
 	| number
@@ -83,7 +83,7 @@ export type ComponentProps<
 	: never;
 
 export interface FunctionComponent<P = {}> {
-	(props: RenderableProps<P>, context?: any): VNode<any> | null;
+	(props: RenderableProps<P>, context?: any): __VNode<any> | null;
 	displayName?: string;
 	defaultProps?: Partial<P>;
 }
@@ -191,12 +191,12 @@ export function createElement(
 				Record<string, any>)
 		| null,
 	...children: ComponentChildren[]
-): VNode<any>;
+): __VNode<any>;
 export function createElement<P>(
 	type: ComponentType<P>,
 	props: (Attributes & P) | null,
 	...children: ComponentChildren[]
-): VNode<any>;
+): __VNode<any>;
 export namespace createElement {
 	export import JSX = JSXInternal;
 }
@@ -209,12 +209,12 @@ export function h(
 				Record<string, any>)
 		| null,
 	...children: ComponentChildren[]
-): VNode<any>;
+): __VNode<any>;
 export function h<P>(
 	type: ComponentType<P>,
 	props: (Attributes & P) | null,
 	...children: ComponentChildren[]
-): VNode<any>;
+): __VNode<any>;
 export namespace h {
 	export import JSX = JSXInternal;
 }
@@ -233,15 +233,15 @@ export function hydrate(
 	parent: Element | Document | ShadowRoot | DocumentFragment
 ): void;
 export function cloneElement(
-	vnode: VNode<any>,
+	vnode: __VNode<any>,
 	props?: any,
 	...children: ComponentChildren[]
-): VNode<any>;
+): __VNode<any>;
 export function cloneElement<P>(
-	vnode: VNode<P>,
+	vnode: __VNode<P>,
 	props?: any,
 	...children: ComponentChildren[]
-): VNode<P>;
+): __VNode<P>;
 
 //
 // Preact Built-in Components
@@ -259,17 +259,17 @@ export const Fragment: ComponentClass<{}, {}>;
  */
 export interface Options {
 	/** Attach a hook that is invoked whenever a VNode is created. */
-	vnode?(vnode: VNode): void;
+	vnode?(vnode: __VNode): void;
 	/** Attach a hook that is invoked immediately before a vnode is unmounted. */
-	unmount?(vnode: VNode): void;
+	unmount?(vnode: __VNode): void;
 	/** Attach a hook that is invoked after a vnode has rendered. */
-	diffed?(vnode: VNode): void;
+	diffed?(vnode: __VNode): void;
 	event?(e: Event): any;
 	requestAnimationFrame?: typeof requestAnimationFrame;
 	debounceRendering?(cb: () => void): void;
 	useDebugValue?(value: string | number): void;
 	_addHookName?(name: string | number): void;
-	__suspenseDidResolve?(vnode: VNode, cb: () => void): void;
+	__suspenseDidResolve?(vnode: __VNode, cb: () => void): void;
 	// __canSuspenseResolve?(vnode: VNode, cb: () => void): void;
 }
 
@@ -281,8 +281,8 @@ export const options: Options;
 export function createRef<T = any>(): RefObject<T>;
 export function toChildArray(
 	children: ComponentChildren
-): Array<VNode | string | number>;
-export function isValidElement(vnode: any): vnode is VNode;
+): Array<__VNode | string | number>;
+export function isValidElement(vnode: any): vnode is __VNode;
 
 //
 // Context
