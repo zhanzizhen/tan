@@ -1,6 +1,6 @@
 {
   "name": "antd-modal-reset-plugin",
-  "version": "0.5.0",
+  "version": "0.0.1",
   "description": "a plugin used to reset state of a modal after being closed",
   "main": "lib/index.js",
   "module": "es/index.js",
