@@ -1,7 +1,3 @@
-/**
- * 1. 类型从types/interval引入
- */
-
 import diffElementNodes from "../diff/diffVnode";
 import { ComponentChildren, VNode } from "../types/internal";
 import { createVNode } from "../utils/vnode";

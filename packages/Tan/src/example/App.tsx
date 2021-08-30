@@ -1,12 +1,7 @@
 import { h } from "preact";
 import Component from "./Component";
 
-export default class App extends Component<any, { todoList: string[] }> {
-  refs: any;
-  constructor() {
-    super();
-  }
-
+export default class App extends Component<any, { msg: string }> {
   state = {
     msg: "hello tan",
   };

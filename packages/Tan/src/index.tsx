@@ -1,4 +1,4 @@
-import { jsx as h } from "./jsx-runtime";
+import { h } from "preact";
 import App from "./example/App";
 import { renderApp } from "./core";
 

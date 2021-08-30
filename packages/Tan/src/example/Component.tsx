@@ -1,10 +1,12 @@
-import { RenderableProps, ComponentChild } from "preact";
-import { diffChildren, diffVnode } from "../core";
+import { diffVnode } from "../core";
+import { RenderableProps } from "../types";
 import { Component, PreactElement, VNode } from "../types/internal";
 
 export default abstract class TanComponent<P = {}, S = {}>
   implements Component<P, S>
 {
+  props: RenderableProps<P>;
+	context: any;
   state: S; // Override Component["state"] to not be readonly for internal use, specifically Hooks
   base?: PreactElement;
 
@@ -27,25 +29,39 @@ export default abstract class TanComponent<P = {}, S = {}>
   _pendingError?: Component<any, any> | null;
 
   constructor() {
-    this.state = {};
-    this.props = {};
+    this.state = {} as S;
+    this.props = {} as P;
     this._dirty = false;
     this._renderCallbacks = [];
     this._parentDom = null;
   }
 
-  setState(state: { [key: string]: any }) {
-    this.state = {
-      ...this.state,
-      ...state,
-    };
+  setState(state: S | ((s: S) => S)) {
+    if (typeof state === "function") {
+      this.setState = {
+        ...this.state,
+        ...state(this.state),
+      };
+    } else {
+      this.state = {
+        ...this.state,
+        ...state,
+      };
+    }
 
     const newNode = this.render();
+
+    // if (!newNode || !this._vnode || !this._parentDom) {
+    //   throw Error("还未实现");
+    // }
+
     diffVnode(newNode, this._vnode, this._parentDom);
     this._vnode = newNode;
   }
 
-  forceUpdate() {}
+  forceUpdate() {
+    this.setState({});
+  }
 
   abstract render(
     props?: RenderableProps<P>,
