@@ -1,7 +1,7 @@
 {
-  "name": "vanilla-typescript",
+  "name": "tan",
   "version": "1.0.0",
-  "description": "JavaScript and TypeScript example starter project",
+  "description": "a react-lite project for playing",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
@@ -21,7 +21,6 @@
     "@babel/preset-env": "7.13.8"
   },
   "keywords": [
-    "typescript",
-    "javascript"
+    "react-lite"
   ]
 }
