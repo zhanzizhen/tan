@@ -1,5 +1,5 @@
 import { RenderableProps, ComponentChild } from "preact";
-import { diffChildren, diffVnode } from "../core";
+import { diffChildren, diffVnode } from ".";
 import { Component, PreactElement, VNode } from "../types/internal";
 
 export default abstract class TanComponent<P = {}, S = {}>

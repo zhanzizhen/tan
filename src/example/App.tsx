@@ -1,5 +1,5 @@
 import { h } from "preact";
-import Component from "./Component";
+import Component from "../core/Component";
 
 export default class App extends Component<any, { todoList: string[] }> {
   refs: any;
