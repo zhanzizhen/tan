@@ -1,17 +1,17 @@
-import { RenderableProps, ComponentChild } from "preact";
-import { diffChildren, diffVnode } from ".";
+import { RenderableProps } from "preact";
+import { diffVnode } from "../diff/diffVNodes";
 import { Component, PreactElement, VNode } from "../types/internal";
 
-export default abstract class TanComponent<P = {}, S = {}>
-  implements Component<P, S>
-{
+export default abstract class TanComponent<P = {}, S = {}> {
   state: S; // Override Component["state"] to not be readonly for internal use, specifically Hooks
   base?: PreactElement;
+  props: P;
 
   _dirty: boolean;
   _force?: boolean;
   _renderCallbacks: Array<() => void>; // Only class components
   _globalContext?: any;
+
   _vnode?: VNode<P> | null;
   _nextState?: S | null; // Only class components
   /** Only used in the devtools to later dirty check if state has changed */
@@ -25,6 +25,7 @@ export default abstract class TanComponent<P = {}, S = {}>
   _processingException?: Component<any, any> | null;
   // Always read, set only when handling error. This is used to indicate at diffTime to set _processingException
   _pendingError?: Component<any, any> | null;
+  context?: any;
 
   constructor() {
     this.state = {};
@@ -34,15 +35,22 @@ export default abstract class TanComponent<P = {}, S = {}>
     this._parentDom = null;
   }
 
-  setState(state: { [key: string]: any }) {
+  setState(
+    state: { [key: string]: any } | ((s: S) => Partial<S>),
+    callback?: () => void
+  ) {
+    if (typeof state === "function") {
+      state = state(this.state);
+    }
+
+    debugger
+
     this.state = {
       ...this.state,
       ...state,
     };
 
-    const newNode = this.render();
-    diffVnode(newNode, this._vnode, this._parentDom);
-    this._vnode = newNode;
+    diffVnode(this.render(), this._vnode, this._parentDom);
   }
 
   forceUpdate() {}

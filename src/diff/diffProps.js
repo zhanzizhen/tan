@@ -6,15 +6,14 @@ import { IS_NON_DIMENSIONAL } from "../constants";
  * changes to
  * @param {object} newProps The new props
  * @param {object} oldProps The old props
- * @param {boolean} isSvg Whether or not this node is an SVG node
  * @param {boolean} hydrate Whether or not we are in hydration mode
  */
-export default function diffProps(dom, newProps, oldProps, isSvg, hydrate) {
+export default function diffProps(dom, newProps, oldProps,  hydrate) {
   let i;
 
   for (i in oldProps) {
     if (i !== "children" && i !== "key" && !(i in newProps)) {
-      setProperty(dom, i, null, oldProps[i], isSvg);
+      setProperty(dom, i, null, oldProps[i]);
     }
   }
 
@@ -27,7 +26,7 @@ export default function diffProps(dom, newProps, oldProps, isSvg, hydrate) {
       i !== "checked" &&
       oldProps[i] !== newProps[i]
     ) {
-      setProperty(dom, i, newProps[i], oldProps[i], isSvg);
+      setProperty(dom, i, newProps[i], oldProps[i]);
     }
   }
 }
@@ -50,9 +49,8 @@ function setStyle(style, key, value) {
  * @param {string} name The name of the property to set
  * @param {*} value The value to set the property to
  * @param {*} oldValue The old value the property had
- * @param {boolean} isSvg Whether or not this DOM node is an SVG node or not
  */
-export function setProperty(dom, name, value, oldValue, isSvg) {
+export function setProperty(dom, name, value, oldValue) {
   let useCapture;
 
   o: if (name === "style") {
@@ -101,12 +99,7 @@ export function setProperty(dom, name, value, oldValue, isSvg) {
       dom.removeEventListener(name, handler, useCapture);
     }
   } else if (name !== "dangerouslySetInnerHTML") {
-    if (isSvg) {
-      // Normalize incorrect prop usage for SVG:
-      // - xlink:href / xlinkHref --> href (xlink:href was removed from SVG and isn't needed)
-      // - className --> class
-      name = name.replace(/xlink[H:h]/, "h").replace(/sName$/, "s");
-    } else if (
+    if (
       name !== "href" &&
       name !== "list" &&
       name !== "form" &&
