@@ -1,7 +1,8 @@
 import { h } from "preact";
+import { renderApp } from "../core";
 import Component from "../core/Component";
 
-export default class App extends Component<any, { todoList: string[] }> {
+class App extends Component<any, { todoList: string[] }> {
   refs: any;
   constructor() {
     super();
@@ -28,3 +29,5 @@ export default class App extends Component<any, { todoList: string[] }> {
     );
   }
 }
+
+renderApp(<App />, document.getElementById("app")!);
