@@ -1,6 +1,5 @@
 import { Fragment } from "../core";
-import Component from "../core/Component";
-import { VNode } from "../types/internal";
+import { VNode } from "../types/index";
 import { diffChildren } from "./diffChildren";
 import diffElementNodes from "./diffElementNodes";
 
@@ -11,9 +10,8 @@ export function diffVnode(
 ) {
   const newVType = newVnode.type;
 
-  // TODO: 处理这个逻辑
   if (typeof newVType === "function") {
-    var c: Component<any, any> = (newVnode._component = new newVType());
+    var c = newVType();
 
     let newProps = newVnode.props;
     c.props = newProps;
@@ -31,11 +29,6 @@ export function diffVnode(
       parentDom
     );
   } else {
-    newVnode._dom = diffElementNodes(
-      oldVnode._dom,
-      newVnode,
-      oldVnode,
-      null,
-    );
+    newVnode._dom = diffElementNodes(oldVnode._dom, newVnode, oldVnode, null);
   }
 }

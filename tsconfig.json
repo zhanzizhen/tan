@@ -3,12 +3,14 @@
     "strict": true,
     "module": "commonjs",
     "jsx": "react",
-    "jsxFactory": "h",
+    "jsxFactory": "jsx",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
     "lib": ["es6", "dom"],
     "rootDir": "src",
-    "moduleResolution": "node"
-  }
+    "moduleResolution": "node",
+    "outDir": "out"
+  },
+  "exclude": ["jest.config.js"]
 }

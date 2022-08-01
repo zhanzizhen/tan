@@ -4,7 +4,7 @@
 
 import { diffVnode } from "../diff/diffVNodes";
 import { EMPTY_VNODE } from "../diff/unmount";
-import { VNode } from "../types/internal";
+import { VNode } from "../types";
 
 export const renderApp = (app: VNode, target: HTMLElement) => {
   diffVnode(app, EMPTY_VNODE, target);

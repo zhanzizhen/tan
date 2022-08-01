@@ -1,33 +1,16 @@
-import { h } from "preact";
+import { jsx } from "../jsx-runtime";
 import { renderApp } from "../core";
-import Component from "../core/Component";
 
-class App extends Component<any, { todoList: string[] }> {
-  refs: any;
-  constructor() {
-    super();
-  }
+function App() {
+  return (
+    <div>
+      <div>123</div>
 
-  state = {
-    msg: "hello tan",
-  };
-
-  reverse = () => {
-    this.setState({
-      msg: this.state.msg.split("").reverse().join(""),
-    });
-  };
-
-  render() {
-    const { msg } = this.state;
-    return (
-      <div>
-        <div>{msg}</div>
-
-        <button onClick={this.reverse}>reverse</button>
-      </div>
-    );
-  }
+      <button onClick={() => console.log(34)}>reverse</button>
+    </div>
+  );
 }
+
+type a = JSX.Element;
 
 renderApp(<App />, document.getElementById("app")!);
